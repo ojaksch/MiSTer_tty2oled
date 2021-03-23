@@ -1,0 +1,42 @@
+#!/bin/sh
+
+#
+# 2021-01-22 Added -x /usr/bin/tty2oled check to start()
+#
+
+
+# Start
+start() {
+    if [[ -x /usr/bin/tty2oled ]]; then
+      echo "Starting tty2oled..."
+      /usr/bin/tty2oled &
+    else
+      echo "/usr/bin/tty2oled not found!"
+    fi
+}
+
+# Stop
+stop() {
+    echo "Stopping tty2oled..."
+    killall tty2oled
+}
+
+case "$1" in
+  start)
+        start
+        ;;
+  stop) 
+        stop
+        ;;
+  restart)
+        stop
+        start
+        ;;
+#  reload)
+#       reload
+#       ;;
+  *)
+#        echo "Usage: $0 {start|stop|restart|reload}"
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+esac
