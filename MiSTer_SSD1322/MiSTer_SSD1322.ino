@@ -31,6 +31,9 @@ U8G2_SSD1322_NHD_256X64_F_4W_HW_SPI u8g2(U8G2_R2, /* cs=*/ 12, /* dc=*/ 13, /* r
 // Display Constructor HW-SPI Mighty Core ATMega 1284 0° Rotation => U8G2_R0
 //U8G2_SSD1322_NHD_256X64_F_4W_HW_SPI u8g2(U8G2_R0, /* cs=*/ 17, /* dc=*/ 16, /* reset=*/ 18);  // Enable U8G2_16BIT in u8g2.h <= !! W I C H T I G !!
 
+// Display Constructor HW-SPI ESP8266-Board (NodeMCU) 180° Rotation => U8G2_R2
+//U8G2_SSD1322_NHD_256X64_F_4W_HW_SPI u8g2(U8G2_R2, /* cs=*/ 15, /* dc=*/ 4, /* reset=*/ 5);  // Enable U8G2_16BIT in u8g2.h <= !! W I C H T I G !!
+
 // ------------ Variables ----------------
 // For Particle effect
 const int logoBytes = 2048; // 0..2047
