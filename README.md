@@ -6,7 +6,10 @@ Software Add-On for the [MiSTer FPGA](https://github.com/MiSTer-devel) showing T
 Jump to the WIKI 😃 https://github.com/venice1200/MiSTer_tty2oled/wiki for more Information.
 
 ## Playground addendum:
-Create the folder ***/media/fat/tty2oledpics*** on the MiSTer device .
-Then copy the content of ***Pictures/XBM_SD*** of this repo to this newly created directory.
+* ~~Create the folder ***/media/fat/tty2oledpics*** on the MiSTer device .
+Then copy the content of ***Pictures/XBM_SD*** of this repo to this newly created directory.~~
 
-Continue with the installation as described in the WIKI.
+* Download the update/install script **update_tty2oled.sh** to ***/media/fat/Scripts*** at the MiSTer device and run it by typing **update_tty2oled.sh** at MiSTer's console.  
+Script will download the needed files, start a daemon and you should see the first logo at the OLED :video_game:
+
+~~Continue with the installation as described in the [WIKI](https://github.com/venice1200/MiSTer_tty2oled/wiki).~~
