@@ -1,25 +1,43 @@
 #!/bin/bash
 
-# wget –c https://github.com/venice1200/MiSTer_tty2oled/releases/download/
+# Copyright (c) 2021 Oliver Jaksch
 
-echo -e "\ntty2oled update script"
-echo "----------------------"
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 
-echo "Checking for available updates..."
-tty2oled_gitver=$(wget -q https://raw.githubusercontent.com/ojaksch/MiSTer_tty2oled/master/Changelog.md -O - | awk '{print $2}')
-[[ -f /media/fat/tty2oledpics/.version ]] && tty2oled_ver=$(cat /media/fat/tty2oledpics/.version)
-[[ "${tty2oled_ver}" = "" ]] && tty2oled_ver="(none)"
-echo "Local available version: ${tty2oled_ver} - Version at GitHub: ${tty2oled_gitver}"
-if [ ${tty2oled_ver} = ${tty2oled_gitver} ]; then
-  echo -e "No update available.\n"
-  exit 1
-fi
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
-echo "Retrieving and processing update..."
-wget -qO- https://github.com/ojaksch/MiSTer_tty2oled/releases/download/0.5/tty2oled-${tty2oled_gitver}.zip | bsdtar  -xf- --uname root --gname root -C /
-[[ -f /etc/init.d/S60tty2oled ]] && chmod +x /etc/init.d/S60tty2oled
-[[ -f /usr/bin/tty2oled ]] && chmod +x /usr/bin/tty2oled
-echo "${tty2oled_gitver}" > /media/fat/tty2oledpics/.version
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-echo -e "Restarting init script\n"
-/etc/init.d/S60tty2oled restart
+# You can download the latest version of this script from:
+# https://github.com/venice1200/MiSTer_tty2oled
+
+
+
+SCRIPTNAME="/tmp/update_script_tty2oled.sh.sh"
+
+echo -e "\nIf you want to FORCE an update, please re-run with parameter -f"
+
+wget -q https://raw.githubusercontent.com/ojaksch/MiSTer_tty2oled/master/update_script.sh -O ${SCRIPTNAME}
+case  ${?} in
+    0) bash ${SCRIPTNAME} ${1} ;;
+    1) echo "wget: Generic error code." ;;
+    2) echo "wget: Parse error---for instance, when parsing command-line options, the .wgetrc or .netrc..." ;;
+    3) echo "wget: File I/O error." ;;
+    4) echo "wget: Network failure." ;;
+    5) echo "wget: SSL verification failure." ;;
+    6) echo "wget: Username/password authentication failure." ;;
+    7) echo "wget: Protocol errors." ;;
+    8) echo "wget: Server issued an error response." ;;
+    *) echo "Unexpected and uncatched error." ;;
+esac
+
+[[ -f ${SCRIPTNAME} ]] && rm ${SCRIPTNAME}
+
+exit 0
