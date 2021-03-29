@@ -20,11 +20,12 @@
 
 
 
-SCRIPTNAME="/tmp/update_script_tty2oled.sh.sh"
+REPOSITORY_URL="https://github.com/ojaksch/MiSTer_tty2oled"
+SCRIPTNAME="/tmp/update_script_tty2oled.sh"
 
 echo -e "\nIf you want to FORCE an update, please re-run with parameter -f"
 
-wget -q https://raw.githubusercontent.com/ojaksch/MiSTer_tty2oled/master/update_script.sh -O ${SCRIPTNAME}
+wget -q ${REPOSITORY_URL}/blob/master/update_script_tty2oled.sh?raw=true -O ${SCRIPTNAME}
 case  ${?} in
     0) bash ${SCRIPTNAME} ${1} ;;
     1) echo "wget: Generic error code." ;;
