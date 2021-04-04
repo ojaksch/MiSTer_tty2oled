@@ -39,7 +39,7 @@ tty2oled_gitver=$(wget ${NODEBUG} "${REPOSITORY_URL}/blob/master/version?raw=tru
 [[ "${tty2oled_ver}" = "" ]] && tty2oled_ver="(none)"
 echo -e "\e[1;32mLocal available version: ${tty2oled_ver} - Version at GitHub: ${tty2oled_gitver}\e[0m"
 if [ ${tty2oled_ver} = ${tty2oled_gitver} ]; then
-    echo -ne "\e[1;32mNo update available"
+    echo -ne "\e[1;33mNo update available"
     if [ "${1}" = "-f" ]; then
 	echo -e ", but update forced.\n\e[0m"
     else
