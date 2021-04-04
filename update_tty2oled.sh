@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2021 Oliver Jaksch
+# v1.0 - Copyright (c) 2021 Oliver Jaksch, Lars Meuser
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,12 +20,18 @@
 
 
 
+# Changelog:
+# v1.0	Base updater script. Downloads and executes a second script (Main updater), which in turn completes all tasks.
+
+
+
+# REPOSITORY_URL="https://github.com/venice1200/MiSTer_tty2oled"
 REPOSITORY_URL="https://github.com/ojaksch/MiSTer_tty2oled"
 SCRIPTNAME="/tmp/update_script_tty2oled.sh"
 
 echo -e "\nIf you want to FORCE an update, please re-run with parameter -f"
 
-wget -q ${REPOSITORY_URL}/blob/master/update_script_tty2oled.sh?raw=true -O ${SCRIPTNAME}
+wget -q "${REPOSITORY_URL}/blob/master/update_script_tty2oled.sh?raw=true" -O ${SCRIPTNAME}
 case  ${?} in
     0) bash ${SCRIPTNAME} ${1} ;;
     1) echo "wget: Generic error code." ;;

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2021 Oliver Jaksch
+# v1.0 - Copyright (c) 2021 Oliver Jaksch, Lars Meuser
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,6 +20,11 @@
 
 
 
+# Changelog:
+# v1.0	Main updater script which completes all tasks.
+
+
+
 # REPOSITORY_URL="https://github.com/venice1200/MiSTer_tty2oled"
 REPOSITORY_URL="https://github.com/ojaksch/MiSTer_tty2oled"
 TTY2OLED_PATH="/media/fat/tty2oledpics"
@@ -28,7 +33,7 @@ echo -e "\ntty2oled update script"
 echo "----------------------"
 
 echo "Checking for available updates..."
-tty2oled_gitver=$(wget -q ${REPOSITORY_URL}/blob/master/Changelog.md?raw=true -O - | cut -f 2)
+tty2oled_gitver=$(wget -q "${REPOSITORY_URL}/blob/master/Changelog.md?raw=true" -O - | cut -f 2)
 [[ -f ${TTY2OLED_PATH}/.version ]] && tty2oled_ver=$(<${TTY2OLED_PATH}/.version)
 [[ "${tty2oled_ver}" = "" ]] && tty2oled_ver="(none)"
 echo "Local available version: ${tty2oled_ver} - Version at GitHub: ${tty2oled_gitver}"
@@ -43,10 +48,10 @@ if [ ${tty2oled_ver} = ${tty2oled_gitver} ]; then
 fi
 
 echo "Retrieving and processing update..."
-wget -qO- ${REPOSITORY_URL}/releases/download/${tty2oled_gitver//v}/tty2oled-${tty2oled_gitver}.zip | bsdtar  -xf- --uname root --gname root -C /
+wget -qO- "${REPOSITORY_URL}/releases/download/${tty2oled_gitver//v}/tty2oled-${tty2oled_gitver}.zip" | bsdtar  -xf- --uname root --gname root -C /
 [[ -f /etc/init.d/S60tty2oled ]] && chmod +x /etc/init.d/S60tty2oled
 [[ -f /usr/bin/tty2oled ]] && chmod +x /usr/bin/tty2oled
 echo "${tty2oled_gitver}" > ${TTY2OLED_PATH}/.version
 
-echo -e "Restarting init script\n"
+echo -e "(Re-) starting init script\n"
 /etc/init.d/S60tty2oled restart
