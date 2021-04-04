@@ -28,12 +28,13 @@
 # REPOSITORY_URL="https://github.com/venice1200/MiSTer_tty2oled"
 REPOSITORY_URL="https://github.com/ojaksch/MiSTer_tty2oled"
 TTY2OLED_PATH="/media/fat/tty2oledpics"
+NODEBUG="-q"
 
 echo -e "\ntty2oled update script"
 echo "----------------------"
 
 echo "Checking for available updates..."
-tty2oled_gitver=$(wget "${REPOSITORY_URL}/blob/master/version?raw=true" -O - | cut -f 2)
+tty2oled_gitver=$(wget ${NODEBUG} "${REPOSITORY_URL}/blob/master/version?raw=true" -O - | cut -f 2)
 [[ -f ${TTY2OLED_PATH}/.version ]] && tty2oled_ver=$(<${TTY2OLED_PATH}/.version)
 [[ "${tty2oled_ver}" = "" ]] && tty2oled_ver="(none)"
 echo "Local available version: ${tty2oled_ver} - Version at GitHub: ${tty2oled_gitver}"
@@ -49,7 +50,7 @@ fi
 
 echo "Retrieving and processing update..."
 mkdir -p /media/fat/tty2oledpics
-wget -O- "${REPOSITORY_URL}/releases/download/${tty2oled_gitver}/tty2oled-${tty2oled_gitver}.zip" | bsdtar  -xf- --uname root --gname root -C /
+wget ${NODEBUG} -O- "${REPOSITORY_URL}/releases/download/${tty2oled_gitver}/tty2oled-${tty2oled_gitver}.zip" | bsdtar  -xf- --uname root --gname root -C /
 [[ -f /etc/init.d/S60tty2oled ]] && chmod +x /etc/init.d/S60tty2oled
 [[ -f /usr/bin/tty2oled ]] && chmod +x /usr/bin/tty2oled
 echo "${tty2oled_gitver}" > ${TTY2OLED_PATH}/.version
