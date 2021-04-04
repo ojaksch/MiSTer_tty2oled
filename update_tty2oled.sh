@@ -29,20 +29,20 @@
 REPOSITORY_URL="https://github.com/ojaksch/MiSTer_tty2oled"
 SCRIPTNAME="/tmp/update_script_tty2oled.sh"
 
-echo -e "\nIf you want to FORCE an update, please re-run with parameter -f"
+echo -e "\n\e[1;32mIf you want to FORCE an update, please re-run with parameter -f\e[0m"
 
 wget -q --no-cache "${REPOSITORY_URL}/blob/master/update_script_tty2oled.sh?raw=true" -O ${SCRIPTNAME}
 case  ${?} in
     0) bash ${SCRIPTNAME} ${1} ;;
-    1) echo "wget: Generic error code." ;;
-    2) echo "wget: Parse error---for instance, when parsing command-line options, the .wgetrc or .netrc..." ;;
-    3) echo "wget: File I/O error." ;;
-    4) echo "wget: Network failure." ;;
-    5) echo "wget: SSL verification failure." ;;
-    6) echo "wget: Username/password authentication failure." ;;
-    7) echo "wget: Protocol errors." ;;
-    8) echo "wget: Server issued an error response." ;;
-    *) echo "Unexpected and uncatched error." ;;
+    1) echo -e "\e[1;33mwget: \e[1;31mGeneric error code.\e[0m" ;;
+    2) echo -e "\e[1;33mwget: \e[1;31mParse error---for instance, when parsing command-line options, the .wgetrc or .netrc..." ;;
+    3) echo -e "\e[1;33mwget: \e[1;31mFile I/O error.\e[0m" ;;
+    4) echo -e "\e[1;33mwget: \e[1;31mNetwork failure.\e[0m" ;;
+    5) echo -e "\e[1;33mwget: \e[1;31mSSL verification failure.\e[0m" ;;
+    6) echo -e "\e[1;33mwget: \e[1;31mUsername/password authentication failure.\e[0m" ;;
+    7) echo -e "\e[1;33mwget: \e[1;31mProtocol errors.\e[0m" ;;
+    8) echo -e "\e[1;33mwget: \e[1;31mServer issued an error response.\e[0m" ;;
+    *) echo -e "\e[1;31mUnexpected and uncatched error.\e[0m" ;;
 esac
 
 [[ -f ${SCRIPTNAME} ]] && rm ${SCRIPTNAME}

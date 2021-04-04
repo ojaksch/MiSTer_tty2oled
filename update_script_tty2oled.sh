@@ -30,30 +30,30 @@ REPOSITORY_URL="https://github.com/ojaksch/MiSTer_tty2oled"
 TTY2OLED_PATH="/media/fat/tty2oledpics"
 NODEBUG="-q"
 
-echo -e "\ntty2oled update script"
-echo "----------------------"
+echo -e "\n\e[1;32mtty2oled update script"
+echo -e "----------------------\e[0m"
 
-echo "Checking for available updates..."
+echo -e "\e[1;32mChecking for available updates...\e[0m"
 tty2oled_gitver=$(wget ${NODEBUG} "${REPOSITORY_URL}/blob/master/version?raw=true" -O - | cut -f 2)
 [[ -f ${TTY2OLED_PATH}/.version ]] && tty2oled_ver=$(<${TTY2OLED_PATH}/.version)
 [[ "${tty2oled_ver}" = "" ]] && tty2oled_ver="(none)"
-echo "Local available version: ${tty2oled_ver} - Version at GitHub: ${tty2oled_gitver}"
+echo -e "\e[1;32mLocal available version: ${tty2oled_ver} - Version at GitHub: ${tty2oled_gitver}\e[0m"
 if [ ${tty2oled_ver} = ${tty2oled_gitver} ]; then
-    echo -n "No update available"
+    echo -ne "\e[1;32mNo update available"
     if [ "${1}" = "-f" ]; then
-	echo -e ", but update forced.\n"
+	echo -e ", but update forced.\n\e[0m"
     else
-	echo -e ".\n"
+	echo -e ".\n\e[0m"
 	exit 1
     fi
 fi
 
-echo "Retrieving and processing update..."
+echo -e "\e[1;32mRetrieving and processing update...\e[0m"
 mkdir -p /media/fat/tty2oledpics
 wget ${NODEBUG} -O- "${REPOSITORY_URL}/releases/download/${tty2oled_gitver}/tty2oled-${tty2oled_gitver}.zip" | bsdtar  -xf- --uname root --gname root -C /
 [[ -f /etc/init.d/S60tty2oled ]] && chmod +x /etc/init.d/S60tty2oled
 [[ -f /usr/bin/tty2oled ]] && chmod +x /usr/bin/tty2oled
 echo "${tty2oled_gitver}" > ${TTY2OLED_PATH}/.version
 
-echo -e "(Re-) starting init script\n"
+echo -e "\e[1;32m(Re-) starting init script\n\e[0m"
 /etc/init.d/S60tty2oled restart
