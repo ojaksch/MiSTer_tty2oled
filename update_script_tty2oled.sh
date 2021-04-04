@@ -48,7 +48,8 @@ if [ ${tty2oled_ver} = ${tty2oled_gitver} ]; then
 fi
 
 echo "Retrieving and processing update..."
-wget -qO- "${REPOSITORY_URL}/releases/download/${tty2oled_gitver//v}/tty2oled-${tty2oled_gitver}.zip" | bsdtar  -xf- --uname root --gname root -C /
+mkdir -p /media/fat/tty2oledpics
+wget -qO- "${REPOSITORY_URL}/releases/download/${tty2oled_gitver}/tty2oled-${tty2oled_gitver}.zip" | bsdtar  -xf- --uname root --gname root -C /
 [[ -f /etc/init.d/S60tty2oled ]] && chmod +x /etc/init.d/S60tty2oled
 [[ -f /usr/bin/tty2oled ]] && chmod +x /usr/bin/tty2oled
 echo "${tty2oled_gitver}" > ${TTY2OLED_PATH}/.version
