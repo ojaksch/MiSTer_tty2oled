@@ -33,7 +33,7 @@ echo -e "\ntty2oled update script"
 echo "----------------------"
 
 echo "Checking for available updates..."
-tty2oled_gitver=$(wget -q "${REPOSITORY_URL}/blob/master/Changelog.md?raw=true" -O - | cut -f 2)
+tty2oled_gitver=$(wget -q "${REPOSITORY_URL}/blob/master/version?raw=true" -O - | cut -f 2)
 [[ -f ${TTY2OLED_PATH}/.version ]] && tty2oled_ver=$(<${TTY2OLED_PATH}/.version)
 [[ "${tty2oled_ver}" = "" ]] && tty2oled_ver="(none)"
 echo "Local available version: ${tty2oled_ver} - Version at GitHub: ${tty2oled_gitver}"
