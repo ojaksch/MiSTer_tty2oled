@@ -60,8 +60,6 @@ wget ${NODEBUG} "${REPOSITORY_URL}/blob/master/translation_picture_core.md?raw=t
    if ! [ -f /media/fat/tty2oledpics/${PICNAME} ] || [ "${1}" = "-f" ]; then
      echo -e "\r\e[1;33mDownloading picture \e[1;35m${PICNAME}\e[0m"
      wget ${NODEBUG} "${REPOSITORY_URL}/blob/master/Pictures/XBM_SD/${PICNAME}?raw=true" -O /media/fat/tty2oledpics/${PICNAME}
-   else
-     echo -n "."
    fi
  done
 
