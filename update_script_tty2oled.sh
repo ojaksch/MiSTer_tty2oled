@@ -34,10 +34,11 @@ echo -e "\n\e[1;32mtty2oled update script"
 echo -e "----------------------\e[0m"
 
 echo -e "\e[1;32mChecking for available updates...\e[0m"
+[ "${1}" = "-f" ] && echo -e "\e[1;31m-Forced update-\e[0m"
 
 # init script
 wget ${NODEBUG} "${REPOSITORY_URL}/blob/master/S60tty2oled?raw=true" -O /tmp/S60tty2oled
-if ! cmp -s /tmp/S60tty2oled /etc/init.d/S60tty2oled; then
+if ! cmp -s /tmp/S60tty2oled /etc/init.d/S60tty2oled || [ "${1}" = "-f" ]; then
   echo -e "\e[1;33mUpdating init script \e[1;35mS60tty2oled\e[0m"
   mv -f /tmp/S60tty2oled /etc/init.d/S60tty2oled
   chmod +x /etc/init.d/S60tty2oled
@@ -45,7 +46,7 @@ fi
 
 # daemon
 wget ${NODEBUG} "${REPOSITORY_URL}/blob/master/tty2oled?raw=true" -O /tmp/tty2oled
-if ! cmp -s /tmp/tty2oled /usr/bin/tty2oled; then
+if ! cmp -s /tmp/tty2oled /usr/bin/tty2oled || [ "${1}" = "-f" ]; then
   echo -e "\e[1;33mUpdating daemon \e[1;35mtty2oled\e[0m"
   mv -f /tmp/tty2oled /usr/bin/tty2oled
   chmod +x /usr/bin/tty2oled
@@ -56,9 +57,11 @@ fi
 wget ${NODEBUG} "${REPOSITORY_URL}/blob/master/translation_picture_core.md?raw=true" -O - | \
  grep ".xbm | " | cut -d " " -f 2 | \
  while read PICNAME; do
-   if ! [ -f /media/fat/tty2oledpics/${PICNAME} ]; then
-     echo -e "\e[1;33mDownloading picture \e[1;35m${PICNAME}\e[0m"
+   if ! [ -f /media/fat/tty2oledpics/${PICNAME} ] || [ "${1}" = "-f" ]; then
+     echo -e "\r\e[1;33mDownloading picture \e[1;35m${PICNAME}\e[0m"
      wget ${NODEBUG} "${REPOSITORY_URL}/blob/master/Pictures/XBM_SD/${PICNAME}?raw=true" -O /media/fat/tty2oledpics/${PICNAME}
+   else
+     echo -n "."
    fi
  done
 
