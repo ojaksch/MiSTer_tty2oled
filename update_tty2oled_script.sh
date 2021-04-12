@@ -73,4 +73,4 @@ sync
 echo -e "\e[1;32m(Re-) starting init script\n\e[0m"
 ${INITSCRIPT} restart
 
-[ -z "{SSH_TTY}" ] && echo -e "\e[1;32mPress any key to continue\n\e[0m"
+[ -z "${SSH_TTY}" ] && echo -e "\e[1;32mPress any key to continue\n\e[0m"
