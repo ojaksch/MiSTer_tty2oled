@@ -21,17 +21,21 @@
 
 
 # Changelog:
-# v1.0	Base updater script. Downloads and executes a second script (Main updater), which in turn completes all tasks.
+# v1.1 Use of an INI file (tty2oled.ini)
+# v1.0 Base updater script. Downloads and executes a second script (Main updater), which in turn completes all tasks.
 
 
-
-# REPOSITORY_URL="https://github.com/venice1200/MiSTer_tty2oled/raw/main"
-REPOSITORY_URL="https://github.com/ojaksch/MiSTer_tty2oled/raw/master"
-SCRIPTNAME="/tmp/update_script_tty2oled.sh"
+#REPOSITORY_URL="https://raw.githubusercontent.com/venice1200/MiSTer_tty2oled/main"
+REPOSITORY_URL="https://raw.githubusercontent.com/ojaksch/MiSTer_tty2oled/main"
+SCRIPTNAME="/tmp/update_tty2oled_script.sh"
+NODEBUG="-o /dev/null"
 
 echo -e "\n\e[1;32mIf you want to FORCE an update, please re-run with parameter -f\e[0m"
 
-wget -q --no-cache "${REPOSITORY_URL}/update_script_tty2oled.sh" -O ${SCRIPTNAME}
+if [ -f /media/fat/Scripts/tty2oled.ini ] && [ "${1}" = "-f" ]; then wget ${NODEBUG} --no-cache "${REPOSITORY_URL}/tty2oled.ini" -O /media/fat/Scripts/tty2oled.ini; fi
+! [[ -f /media/fat/Scripts/tty2oled.ini ]] && wget ${NODEBUG} --no-cache "${REPOSITORY_URL}/tty2oled.ini" -O /media/fat/Scripts/tty2oled.ini
+exit
+wget ${NODEBUG} --no-cache "${REPOSITORY_URL}/update_tty2oled_script.sh" -O ${SCRIPTNAME}
 case  ${?} in
     0) bash ${SCRIPTNAME} ${1} ;;
     1) echo -e "\e[1;33mwget: \e[1;31mGeneric error code.\e[0m" ;;
