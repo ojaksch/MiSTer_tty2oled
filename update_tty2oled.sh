@@ -34,7 +34,7 @@ if [ -f /media/fat/Scripts/tty2oled.ini ] && [ "${1}" = "-f" ]; then wget ${NODE
 ! [[ -f /media/fat/Scripts/tty2oled.ini ]] && wget ${NODEBUG} --no-cache "${REPOSITORY_URL}/tty2oled.ini" -O /media/fat/Scripts/tty2oled.ini
 
 wget ${NODEBUG} --no-cache "${REPOSITORY_URL}/update_tty2oled.sh" -O /tmp/update_tty2oled.sh
-if ! cmp -s /tmp/update_tty2oled.sh /media/fat/Scripts/update_tty2oled.sh || [ "${1}" = "-f" ]; then
+if ! cmp -s /tmp/update_tty2oled.sh /media/fat/Scripts/update_tty2oled.sh; then
     mv /tmp/update_tty2oled.sh /media/fat/Scripts/update_tty2oled.sh
     exec /media/fat/Scripts/update_tty2oled.sh
     exit 255
