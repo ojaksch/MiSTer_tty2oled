@@ -42,6 +42,8 @@ if ! cmp -s /tmp/S60tty2oled ${INITSCRIPT} || [ "${1}" = "-f" ]; then
   echo -e "\e[1;33mUpdating init script \e[1;35mS60tty2oled\e[0m"
   mv -f /tmp/S60tty2oled ${INITSCRIPT}
   chmod +x ${INITSCRIPT}
+else
+  rm /tmp/S60tty2oled
 fi
 
 # daemon
@@ -50,6 +52,8 @@ if ! cmp -s /tmp/tty2oled ${DAEMONSCRIPT} || [ "${1}" = "-f" ]; then
   echo -e "\e[1;33mUpdating daemon \e[1;35mtty2oled\e[0m"
   mv -f /tmp/tty2oled ${DAEMONSCRIPT}
   chmod +x ${DAEMONSCRIPT}
+else
+  rm /tmp/tty2oled
 fi
 
 # pictures
