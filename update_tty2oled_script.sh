@@ -63,7 +63,7 @@ wget ${NODEBUG} "${REPOSITORY_URL}/Pictures/XBM_SD/sha1.txt" -O - | grep ".xbm" 
     PICNAME=$(echo ${SHA1PIC} | awk '{print $2}')
     CHKSUM1=$(echo ${SHA1PIC,,} | awk '{print $1}')
     [ -f ${picturefolder}/${PICNAME} ] && CHKSUM2=$(sha1sum ${picturefolder}/${PICNAME} | awk '{print $1}')
-    if ! [ -f ${picturefolder}/${PICNAME} ] || [ "${CHKSUM1}" != "${CHKSUM2}" ] || [ "${OVERWRITE}" = "yes" ]; then
+    if ! [ -f ${picturefolder}/${PICNAME} ] || ([ "${CHKSUM1}" != "${CHKSUM2}" ] && [ "${OVERWRITE}" = "yes" ]); then
       echo -e "\e[1;33mDownloading picture \e[1;35m${PICNAME}\e[0m"
       wget ${NODEBUG} "${REPOSITORY_URL}/Pictures/XBM_SD/${PICNAME}" -O ${picturefolder}/${PICNAME}
     fi
