@@ -28,7 +28,7 @@
 #REPOSITORY_URL="https://raw.githubusercontent.com/venice1200/MiSTer_tty2oled/main"
 REPOSITORY_URL="https://raw.githubusercontent.com/ojaksch/MiSTer_tty2oled/master"
 SCRIPTNAME="/tmp/update_tty2oled_script.sh"
-NODEBUG="-o /dev/null"
+NODEBUG="-q -o /dev/null"
 
 echo -e "\n\e[1;32mIf you want to FORCE an update, please re-run with parameter -f\e[0m"
 
