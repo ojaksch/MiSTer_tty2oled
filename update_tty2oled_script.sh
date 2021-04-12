@@ -25,7 +25,6 @@
 # v1.0 Main updater script which completes all tasks.
 
 
-
 . /media/fat/Scripts/tty2oled.ini
 
 # Check and remount root writable if neccessary
