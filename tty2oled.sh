@@ -102,7 +102,7 @@ senddata() {
       picfnam="XBM_Text/${newcore}.xbm"
     fi
     [ -z "${picfnam}" ] && picfnam="XBM/${newcore}.xbm"
-    7zr e -o/dev/shm -bsp0 -bso0 MiSTer_tty2oled_pictures.7z "${picfnam}"
+    7zr e -o/dev/shm -bsp0 -bso0 ${TTY2OLED_PATH}/MiSTer_tty2oled_pictures.7z "${picfnam}"
 
     picfnam="/dev/shm/${picfnam#*/}"
     if [ -e ${picfnam} ]; then

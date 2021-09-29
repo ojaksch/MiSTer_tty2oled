@@ -124,7 +124,7 @@ fi
 
 # pictures
 echo -e "\e[1;33mDownloading Pictures...\e[0m"
-curl --progress-bar --location --continue-at - --fail --output ${TTY2OLED_PATH}/MiSTer_tty2oled_pictures.7z ${PICTURE_REPOSITORY_URL}
+curl --cacert /etc/ssl/certs/cacert.pem --progress-bar --location --continue-at - --fail --output ${TTY2OLED_PATH}/MiSTer_tty2oled_pictures.7z ${PICTURE_REPOSITORY_URL}
 
 # Check and remount root non-writable if neccessary
 [ "${MOUNTRO}" = "true" ] && /bin/mount -o remount,ro /
