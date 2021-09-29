@@ -108,6 +108,7 @@ senddata() {
     picfnam="/dev/shm/${picfnam#*/}"
     if ! [ -e ${picfnam} ]; then
       7zr e -y -o/dev/shm -bsp0 -bso0 ${TTY2OLED_PATH}/MiSTer_tty2oled_pictures.7z "XBM/${newcore}.xbm"
+      picfnam="/dev/shm/${newcore}.xbm"
     fi
     if [ -e ${picfnam} ]; then
       dbug "Sending: CMDCOR,${1}"
