@@ -100,11 +100,15 @@ senddata() {
       picfnam="XBM_US/${newcore}.xbm"
     elif [ "${USE_TEXT_PICTURE}" = "yes" ]; then
       picfnam="XBM_Text/${newcore}.xbm"
+    else
+      picfnam="XBM/${newcore}.xbm"
     fi
-    [ -z "${picfnam}" ] && picfnam="XBM/${newcore}.xbm"
     7zr e -y -o/dev/shm -bsp0 -bso0 ${TTY2OLED_PATH}/MiSTer_tty2oled_pictures.7z "${picfnam}"
 
     picfnam="/dev/shm/${picfnam#*/}"
+    if ! [ -e ${picfnam} ]; then
+      7zr e -y -o/dev/shm -bsp0 -bso0 ${TTY2OLED_PATH}/MiSTer_tty2oled_pictures.7z "XBM/${newcore}.xbm"
+    fi
     if [ -e ${picfnam} ]; then
       dbug "Sending: CMDCOR,${1}"
       echo "CMDCOR,${1}" > ${TTYDEV}						# Send CORECHANGE" Command and Corename
