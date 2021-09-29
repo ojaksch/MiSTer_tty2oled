@@ -105,7 +105,7 @@ senddata() {
     7zr e -o/dev/shm -bsp0 -bso0 MiSTer_tty2oled_pictures.7z "${picfnam}"
 
     picfnam="/dev/shm/${picfnam#*/}"
-    if [ -e ${picfnam} ]]; then
+    if [ -e ${picfnam} ]; then
       dbug "Sending: CMDCOR,${1}"
       echo "CMDCOR,${1}" > ${TTYDEV}                                            # Send CORECHANGE" Command and Corename
       sleep ${WAITSECS}                                                         # sleep needed here ?!
