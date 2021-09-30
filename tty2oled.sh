@@ -91,32 +91,57 @@ sendrotation() {
 }
 
 # USB Send-Picture-Data function
+# Zu den Prioriäten:
+# 1: GSC pri
+# 2: XBM pri
+# 3: US GSC wenn aktiv
+# 4: US XBM wenn aktiv
+# 5: GSC
+# 6: XBM
+# 7: XBM Text wenn vorhanden
+# 8: Text-Ausgabe
+
 senddata() {
   if [ "${USBMODE}" = "yes" ]; then						# Check the tty2xxx mode
     unset picfnam
 
-    picfnam=$(find ${picturefolder_pri} -name ${newcore}*)			# Check for _pri pictures
-    if ! [ "${picfnam}" = "" ]; then						# If found,
-      cp  "${picfnam}" /dev/shm							# then copy
-      picfnam="/dev/shm/$(basename ${picfnam})"
-    else
-      if [ "${USE_GSC_PICTURE}" = "yes" ]; then
-        picfnam="GSC/${newcore}.gsc"
-      elif [ "${USE_US_PICTURE}" = "yes" ]; then
-        picfnam="XBM_US/${newcore}.xbm"
-      elif [ "${USE_TEXT_PICTURE}" = "yes" ]; then
-        picfnam="XBM_Text/${newcore}.xbm"
-      else
-        picfnam="XBM/${newcore}.xbm"						# Everything set to NO so use Mono picture
-      fi
-      7zr e -y -o/dev/shm -bsp0 -bso0 ${TTY2OLED_PATH}/MiSTer_tty2oled_pictures.7z "${picfnam}"
+    for picfolder in ${picturefolder_pri} GSC_US XBM_US GSC XBM XBM_Text; do
+      for pictype in gsc xbm; do
+	# picfnam=$(find ${picturefolder_pri} -name "${newcore}.${pictype}")	# Check for _pri pictures
+	picfnam="${newcore}.${pictype}"
+	7zr e -y -o/dev/shm -bsp0 -bso0 ${TTY2OLED_PATH}/MiSTer_tty2oled_pictures.7z "${picfolder}/${picfnam}"
+	[ -e "/dev/shm/${picfnam}" ] && break
+#	if [ -e "/dev/shm/${picfnam}" ]; then
+#	  echo gefunden: ${picfnam}
+#	  ls -lh /dev/shm
+#	  break
+#	fi
+      done
+      [ -e "/dev/shm/${picfnam}" ] && break
+    done
 
-      picfnam="/dev/shm/${picfnam#*/}"						# Strip prefix
-      if ! [ -e ${picfnam} ]; then						# Doesn't exist?
-        7zr e -y -o/dev/shm -bsp0 -bso0 ${TTY2OLED_PATH}/MiSTer_tty2oled_pictures.7z "XBM/${newcore}.xbm"
-        picfnam="/dev/shm/${newcore}.xbm"						# Try to use Mono picture
-      fi
-    fi
+#    picfnam=$(find ${picturefolder_pri} -name ${newcore}*)			# Check for _pri pictures
+#    if ! [ "${picfnam}" = "" ]; then						# If found,
+#      cp  "${picfnam}" /dev/shm							# then copy
+#      picfnam="/dev/shm/$(basename ${picfnam})"
+#    else
+#      if [ "${USE_GSC_PICTURE}" = "yes" ]; then
+#        picfnam="GSC/${newcore}.gsc"
+#      elif [ "${USE_US_PICTURE}" = "yes" ]; then
+#        picfnam="XBM_US/${newcore}.xbm"
+#      elif [ "${USE_TEXT_PICTURE}" = "yes" ]; then
+#        picfnam="XBM_Text/${newcore}.xbm"
+#      else
+#        picfnam="XBM/${newcore}.xbm"						# Everything set to NO so use Mono picture
+#      fi
+#      7zr e -y -o/dev/shm -bsp0 -bso0 ${TTY2OLED_PATH}/MiSTer_tty2oled_pictures.7z "${picfnam}"
+#
+#      picfnam="/dev/shm/${picfnam#*/}"						# Strip prefix
+#      if ! [ -e ${picfnam} ]; then						# Doesn't exist?
+#        7zr e -y -o/dev/shm -bsp0 -bso0 ${TTY2OLED_PATH}/MiSTer_tty2oled_pictures.7z "XBM/${newcore}.xbm"
+#        picfnam="/dev/shm/${newcore}.xbm"						# Try to use Mono picture
+#      fi
+#    fi
     if [ -e ${picfnam} ]; then							# Exist?
       dbug "Sending: CMDCOR,${1}"
       echo "CMDCOR,${1}" > ${TTYDEV}						# Send CORECHANGE" Command and Corename
