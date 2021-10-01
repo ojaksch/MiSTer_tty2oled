@@ -124,9 +124,13 @@ fi
 
 # pictures
 echo -e "\e[1;33mDownloading Pictures...\e[0m"
-# curl --cacert /etc/ssl/certs/cacert.pem --progress-bar --location --continue-at - --fail --output ${TTY2OLED_PATH}/MiSTer_tty2oled_pictures.7z ${PICTURE_REPOSITORY_URL}
 cd ${TTY2OLED_PATH}
-wget -qN --show-progress --ca-certificate=/etc/ssl/certs/cacert.pem ${PICTURE_REPOSITORY_URL}
+if [ "${ONEFILE_DOWNLOAD}" = "yes" ]; then
+  wget -qN --show-progress --ca-certificate=/etc/ssl/certs/cacert.pem ${PICTURE_REPOSITORY_URL}
+else
+  [ "${OVERWRITE_PICTURE}" = "no" ] && RSYNCOPTS="--ignore-existing"
+  rsync -rlptDzzP ${RSYNCOPTS} rsync://tty2oled-update-daemon@tty2tft.de/tty2oled-pictures/ ${picturefolder}/
+fi
 
 # Check and remount root non-writable if neccessary
 [ "${MOUNTRO}" = "true" ] && /bin/mount -o remount,ro /

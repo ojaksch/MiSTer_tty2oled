@@ -119,8 +119,13 @@ senddata() {
       [ "${USE_TEXT_PICTURE}" = "no" ] && picfolders="${picfolders//xbm_text/}"
       for picfolder in ${picfolders}; do
 	picfnam="${newcore}.${picfolder:0:3}"
-	7zr e -y -o/dev/shm -bsp0 -bso0 ${TTY2OLED_PATH}/MiSTer_tty2oled_pictures.7z "${picfolder^^}/${picfnam}"
-	[ -e "/dev/shm/${picfnam}" ] && break
+	if [ "${ONEFILE_DOWNLOAD}" = "yes" ]; then
+	  7zr e -y -o/dev/shm -bsp0 -bso0 ${TTY2OLED_PATH}/MiSTer_tty2oled_pictures.7z "${picfolder^^}/${picfnam}"
+	  [ -e "/dev/shm/${picfnam}" ] && break
+	else
+	  [ -e "${picturefolder}/${picfolder^^}/${picfnam}" ] && cp "${picturefolder}/${picfolder^^}/${picfnam}" /dev/shm
+	  [ -e "/dev/shm/${picfnam}" ] && break
+	fi
       done
     fi
     if [ -e "/dev/shm/${picfnam}" ]; then							# Exist?
