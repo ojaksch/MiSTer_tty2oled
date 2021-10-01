@@ -127,7 +127,7 @@ senddata() {
       dbug "Sending: CMDCOR,${1}"
       echo "CMDCOR,${1}" > ${TTYDEV}						# Send CORECHANGE" Command and Corename
       sleep ${WAITSECS}								# sleep needed here ?!
-      tail -n +4 "/dev/shm/${picfnam}" | xxd -r -p > ${TTYDEV}				# The Magic, send the Picture-Data up from Line 4 and proces
+      tail -n +4 "/dev/shm/${picfnam}" | xxd -r -p > ${TTYDEV}			# The Magic, send the Picture-Data up from Line 4 and proces
       rm "/dev/shm/${picfnam}"
     else									# No Picture available!
       echo "${1}" > ${TTYDEV}							# Send just the CORENAME
