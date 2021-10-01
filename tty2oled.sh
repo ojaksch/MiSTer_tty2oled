@@ -102,52 +102,33 @@ sendrotation() {
 # 8: Text-Ausgabe
 
 senddata() {
+  . /media/fat/tty2oled/tty2oled.ini						# ReRead INI for changes
+  newcore="${1}"
+  unset picfnam
   if [ "${USBMODE}" = "yes" ]; then						# Check the tty2xxx mode
-    unset picfnam
-
-    for picfolder in ${picturefolder_pri} GSC_US XBM_US GSC XBM XBM_Text; do
-      for pictype in gsc xbm; do
-	# picfnam=$(find ${picturefolder_pri} -name "${newcore}.${pictype}")	# Check for _pri pictures
-	picfnam="${newcore}.${pictype}"
-	7zr e -y -o/dev/shm -bsp0 -bso0 ${TTY2OLED_PATH}/MiSTer_tty2oled_pictures.7z "${picfolder}/${picfnam}"
+    if [ -e "${picturefolder_pri}/${newcore}.gsc" ]; then			# Check for _pri pictures
+      picfnam="${newcore}.gsc"
+      cp "${picturefolder_pri}/${newcore}.gsc" /dev/shm
+    elif [ -e "${picturefolder_pri}/${newcore}.xbm" ]; then
+      picfnam="${newcore}.xbm"
+      cp "${picturefolder_pri}/${newcore}.xbm" /dev/shm
+    else
+      picfolders="gsc_us xbm_us gsc xbm xbm_text"
+      [ "${USE_US_PICTURE}" = "no" ] && picfolders="${picfolders//gsc_us xbm_us/}"
+      [ "${USE_GSC_PICTURE}" = "no" ] && picfolders="${picfolders//gsc_us/}" && picfolders="${picfolders//gsc/}"
+      [ "${USE_TEXT_PICTURE}" = "no" ] && picfolders="${picfolders//xbm_text/}"
+      for picfolder in ${picfolders}; do
+	picfnam="${newcore}.${picfolder:0:3}"
+	7zr e -y -o/dev/shm -bsp0 -bso0 ${TTY2OLED_PATH}/MiSTer_tty2oled_pictures.7z "${picfolder^^}/${picfnam}"
 	[ -e "/dev/shm/${picfnam}" ] && break
-#	if [ -e "/dev/shm/${picfnam}" ]; then
-#	  echo gefunden: ${picfnam}
-#	  ls -lh /dev/shm
-#	  break
-#	fi
       done
-      [ -e "/dev/shm/${picfnam}" ] && break
-    done
-
-#    picfnam=$(find ${picturefolder_pri} -name ${newcore}*)			# Check for _pri pictures
-#    if ! [ "${picfnam}" = "" ]; then						# If found,
-#      cp  "${picfnam}" /dev/shm							# then copy
-#      picfnam="/dev/shm/$(basename ${picfnam})"
-#    else
-#      if [ "${USE_GSC_PICTURE}" = "yes" ]; then
-#        picfnam="GSC/${newcore}.gsc"
-#      elif [ "${USE_US_PICTURE}" = "yes" ]; then
-#        picfnam="XBM_US/${newcore}.xbm"
-#      elif [ "${USE_TEXT_PICTURE}" = "yes" ]; then
-#        picfnam="XBM_Text/${newcore}.xbm"
-#      else
-#        picfnam="XBM/${newcore}.xbm"						# Everything set to NO so use Mono picture
-#      fi
-#      7zr e -y -o/dev/shm -bsp0 -bso0 ${TTY2OLED_PATH}/MiSTer_tty2oled_pictures.7z "${picfnam}"
-#
-#      picfnam="/dev/shm/${picfnam#*/}"						# Strip prefix
-#      if ! [ -e ${picfnam} ]; then						# Doesn't exist?
-#        7zr e -y -o/dev/shm -bsp0 -bso0 ${TTY2OLED_PATH}/MiSTer_tty2oled_pictures.7z "XBM/${newcore}.xbm"
-#        picfnam="/dev/shm/${newcore}.xbm"						# Try to use Mono picture
-#      fi
-#    fi
-    if [ -e ${picfnam} ]; then							# Exist?
+    fi
+    if [ -e "/dev/shm/${picfnam}" ]; then							# Exist?
       dbug "Sending: CMDCOR,${1}"
       echo "CMDCOR,${1}" > ${TTYDEV}						# Send CORECHANGE" Command and Corename
       sleep ${WAITSECS}								# sleep needed here ?!
-      tail -n +4 "${picfnam}" | xxd -r -p > ${TTYDEV}				# The Magic, send the Picture-Data up from Line 4 and proces
-      rm "${picfnam}"
+      tail -n +4 "/dev/shm/${picfnam}" | xxd -r -p > ${TTYDEV}				# The Magic, send the Picture-Data up from Line 4 and proces
+      rm "/dev/shm/${picfnam}"
     else									# No Picture available!
       echo "${1}" > ${TTYDEV}							# Send just the CORENAME
     fi										# End if Picture check
