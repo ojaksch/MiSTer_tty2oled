@@ -45,6 +45,7 @@
 #            Example: /usr/bin/tty2oled /dev/ttyUSB1 921600 USB
 # 2021-07-14 Clean up Script
 # 2021-09-09 Moved from /etc/init.d to /media/fat/tty2oled 
+# 2021-10-02 Complete rework of senddata
 #
 #
 
@@ -91,16 +92,6 @@ sendrotation() {
 }
 
 # USB Send-Picture-Data function
-# Zu den Prioriäten:
-# 1: GSC pri
-# 2: XBM pri
-# 3: US GSC wenn aktiv
-# 4: US XBM wenn aktiv
-# 5: GSC
-# 6: XBM
-# 7: XBM Text wenn vorhanden
-# 8: Text-Ausgabe
-
 senddata() {
   . /media/fat/tty2oled/tty2oled.ini						# ReRead INI for changes
   newcore="${1}"
@@ -113,22 +104,21 @@ senddata() {
       picfnam="${newcore}.xbm"
       cp "${picturefolder_pri}/${newcore}.xbm" /dev/shm
     else
-      picfolders="gsc_us xbm_us gsc xbm xbm_text"
+      picfolders="gsc_us xbm_us gsc xbm xbm_text"				# If no _pri picture found, try all the others
       [ "${USE_US_PICTURE}" = "no" ] && picfolders="${picfolders//gsc_us xbm_us/}"
-      [ "${USE_GSC_PICTURE}" = "no" ] && picfolders="${picfolders//gsc_us/}" && picfolders="${picfolders//gsc/}"
       [ "${USE_TEXT_PICTURE}" = "no" ] && picfolders="${picfolders//xbm_text/}"
       for picfolder in ${picfolders}; do
 	picfnam="${newcore}.${picfolder:0:3}"
-	if [ "${ONEFILE_DOWNLOAD}" = "yes" ]; then
+	if [ "${ONEFILE_DOWNLOAD}" = "yes" ]; then				# Search and display from archive
 	  7zr e -y -o/dev/shm -bsp0 -bso0 ${TTY2OLED_PATH}/MiSTer_tty2oled_pictures.7z "${picfolder^^}/${picfnam}"
 	  [ -e "/dev/shm/${picfnam}" ] && break
-	else
+	else									# Search and display from folders
 	  [ -e "${picturefolder}/${picfolder^^}/${picfnam}" ] && cp "${picturefolder}/${picfolder^^}/${picfnam}" /dev/shm
 	  [ -e "/dev/shm/${picfnam}" ] && break
 	fi
       done
     fi
-    if [ -e "/dev/shm/${picfnam}" ]; then							# Exist?
+    if [ -e "/dev/shm/${picfnam}" ]; then					# Exist?
       dbug "Sending: CMDCOR,${1}"
       echo "CMDCOR,${1}" > ${TTYDEV}						# Send CORECHANGE" Command and Corename
       sleep ${WAITSECS}								# sleep needed here ?!

@@ -21,7 +21,7 @@
 
 
 # Changelog:
-# v1.7 Grayscale pictures
+# v1.7 Grayscale pictures and new download technics
 # v1.6 Move from Init based Startup to /media/fat/linux/user-startup.sh
 # v1.5 Splitted script download into install and update using new Option "SCRIPT_UPDATE"
 #      Check for disabled Init Script. If exists skip install.
