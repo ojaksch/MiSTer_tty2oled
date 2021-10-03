@@ -128,7 +128,7 @@ cd ${TTY2OLED_PATH}
 if [ "${ONEFILE_DOWNLOAD}" = "yes" ]; then
   wget -qN --show-progress --ca-certificate=/etc/ssl/certs/cacert.pem ${PICTURE_REPOSITORY_URL}
 else
-  [ "${OVERWRITE_PICTURE}" = "no" ] && RSYNCOPTS="--ignore-existing"
+  [ "${OVERWRITE_PICTURE}" = "no" ] && RSYNCOPTS="--ignore-existing" || RSYNCOPTS="--delete"
   rsync -rlptDzzP ${RSYNCOPTS} rsync://tty2oled-update-daemon@tty2tft.de/tty2oled-pictures/ ${picturefolder}/
 fi
 
