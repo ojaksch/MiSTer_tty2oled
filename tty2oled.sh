@@ -106,6 +106,7 @@ senddata() {
     else
       picfolders="gsc_us xbm_us gsc xbm xbm_text"				# If no _pri picture found, try all the others
       [ "${USE_US_PICTURE}" = "no" ] && picfolders="${picfolders//gsc_us xbm_us/}"
+      [ "${USE_GSC_PICTURE}" = "no" ] && picfolders="${picfolders//gsc_us/}" && picfolders="${picfolders//gsc/}"
       [ "${USE_TEXT_PICTURE}" = "no" ] && picfolders="${picfolders//xbm_text/}"
       for picfolder in ${picfolders}; do
 	picfnam="${newcore}.${picfolder:0:3}"
