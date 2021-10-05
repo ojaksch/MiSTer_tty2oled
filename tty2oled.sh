@@ -115,7 +115,10 @@ senddata() {
     fi
     if [ -e "${picfnam}" ]; then						# Exist?
       if [ "${USE_RANDOM_ALT}" = "yes" ]; then					# Use _altX pictures?
-	ALTPICNUM=$(find $(dirname "${picfnam}") -name $(basename "${picfnam%.*}")_alt* | wc -l)
+	SAVEIFS="${IFS}"
+	IFS=$'\n'
+	ALTPICNUM=$(find $(dirname "${picfnam}") -name $(basename "${picfnam%.*}_alt")* | wc -l)
+	IFS="${SAVEIFS}"
 	if [ "${ALTPICNUM}" -gt "0" ]; then					# If more than 0 _altX pictures
 	  ALTPICRND=$(( ${RANDOM} % $((ALTPICNUM+1)) ))				# then dice between 0 and count of found _altX pictures
 	  [ "${ALTPICRND}" -gt 0 ] && picfnam="${picturefolder}/${picfolder^^}/${newcore}_alt"${ALTPICRND}".${picfolder:0:3}"
