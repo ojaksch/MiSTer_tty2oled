@@ -123,11 +123,14 @@ fi
 [[ -f /tmp/${DAEMONNAME} ]] && rm /tmp/${DAEMONNAME}
 
 # pictures
-echo -e "\e[1;33mDownloading Pictures...\e[0m"
-cd ${TTY2OLED_PATH}
-if [ "${ONEFILE_DOWNLOAD}" = "yes" ]; then
-  wget -qN --show-progress --ca-certificate=/etc/ssl/certs/cacert.pem ${PICTURE_REPOSITORY_URL}
+if ! [ -d ${picturefolder}/GSC ];then
+  mkdir -p ${picturefolder}
+  echo -e "\e[1;33mDownloading Pictures (initial)...\e[0m"
+  wget -qN --show-progress --ca-certificate=/etc/ssl/certs/cacert.pem ${PICTURE_REPOSITORY_URL} -O /tmp/MiSTer_tty2oled_pictures.7z
+  7zr x -bsp0 -bso0 /tmp/MiSTer_tty2oled_pictures.7z -o${picturefolder}
+  rm /tmp/MiSTer_tty2oled_pictures.7z
 else
+  echo -e "\e[1;33mDownloading Pictures...\e[0m"
   [ "${OVERWRITE_PICTURE}" = "no" ] && RSYNCOPTS="--ignore-existing" || RSYNCOPTS="--delete"
   rsync -rlptDzzP --modify-window=1 ${RSYNCOPTS} rsync://tty2oled-update-daemon@tty2tft.de/tty2oled-pictures/ ${picturefolder}/
 fi
