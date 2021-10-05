@@ -129,7 +129,7 @@ if ! [ -d ${picturefolder}/GSC ];then
   wget -qN --show-progress --ca-certificate=/etc/ssl/certs/cacert.pem ${PICTURE_REPOSITORY_URL} -O /tmp/MiSTer_tty2oled_pictures.7z
   echo -e "\e[1;33mDecompressing Pictures Archive...\e[0m"
   7zr x -bsp0 -bso0 /tmp/MiSTer_tty2oled_pictures.7z -o${picturefolder}
-#  rm /tmp/MiSTer_tty2oled_pictures.7z
+  rm /tmp/MiSTer_tty2oled_pictures.7z
 else
   echo -e "\e[1;33mDownloading Pictures...\e[0m"
   [ "${OVERWRITE_PICTURE}" = "no" ] && RSYNCOPTS="--ignore-existing" || RSYNCOPTS="--delete"
