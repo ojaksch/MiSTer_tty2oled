@@ -127,6 +127,7 @@ if ! [ -d ${picturefolder}/GSC ];then
   mkdir -p ${picturefolder}
   echo -e "\e[1;33mDownloading Pictures (initial)...\e[0m"
   wget -qN --show-progress --ca-certificate=/etc/ssl/certs/cacert.pem ${PICTURE_REPOSITORY_URL} -O /tmp/MiSTer_tty2oled_pictures.7z
+  echo -e "\e[1;33mDecompressing Pictures...\e[0m"
   7zr x -bsp0 -bso0 /tmp/MiSTer_tty2oled_pictures.7z -o${picturefolder}
   rm /tmp/MiSTer_tty2oled_pictures.7z
 else
