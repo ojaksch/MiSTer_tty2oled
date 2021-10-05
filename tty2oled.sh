@@ -98,28 +98,24 @@ senddata() {
   unset picfnam
   if [ "${USBMODE}" = "yes" ]; then						# Check the tty2xxx mode
     if [ -e "${picturefolder_pri}/${newcore}.gsc" ]; then			# Check for _pri pictures
-      picfnam="${newcore}.gsc"
-      cp "${picturefolder_pri}/${newcore}.gsc" /dev/shm
+       picfnam="${picturefolder_pri}/${newcore}.gsc"
     elif [ -e "${picturefolder_pri}/${newcore}.xbm" ]; then
-      picfnam="${newcore}.xbm"
-      cp "${picturefolder_pri}/${newcore}.xbm" /dev/shm
+       picfnam="${picturefolder_pri}/${newcore}.xbm"
     else
       picfolders="gsc_us xbm_us gsc xbm xbm_text"				# If no _pri picture found, try all the others
       [ "${USE_US_PICTURE}" = "no" ] && picfolders="${picfolders//gsc_us xbm_us/}"
       [ "${USE_GSC_PICTURE}" = "no" ] && picfolders="${picfolders//gsc_us/}" && picfolders="${picfolders//gsc/}"
       [ "${USE_TEXT_PICTURE}" = "no" ] && picfolders="${picfolders//xbm_text/}"
       for picfolder in ${picfolders}; do
-	picfnam="${newcore}.${picfolder:0:3}"
-	  [ -e "${picturefolder}/${picfolder^^}/${picfnam}" ] && cp "${picturefolder}/${picfolder^^}/${picfnam}" /dev/shm
-	  [ -e "/dev/shm/${picfnam}" ] && break
+	picfnam="${picturefolder}/${picfolder^^}/${newcore}.${picfolder:0:3}"
+	  [ -e "${picfnam}" ] && break
       done
     fi
-    if [ -e "/dev/shm/${picfnam}" ]; then					# Exist?
+    if [ -e "${picfnam}" ]; then					# Exist?
       dbug "Sending: CMDCOR,${1}"
       echo "CMDCOR,${1}" > ${TTYDEV}						# Send CORECHANGE" Command and Corename
       sleep ${WAITSECS}								# sleep needed here ?!
-      tail -n +4 "/dev/shm/${picfnam}" | xxd -r -p > ${TTYDEV}			# The Magic, send the Picture-Data up from Line 4 and proces
-      rm "/dev/shm/${picfnam}"
+      tail -n +4 "${picfnam}" | xxd -r -p > ${TTYDEV}			# The Magic, send the Picture-Data up from Line 4 and proces
     else									# No Picture available!
       echo "${1}" > ${TTYDEV}							# Send just the CORENAME
     fi										# End if Picture check
