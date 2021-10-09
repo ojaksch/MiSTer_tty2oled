@@ -103,7 +103,7 @@ fi
 
 wget ${NODEBUG} --no-cache "${REPOSITORY_URL}/update_tty2oled_script.sh" -O "${SCRIPTNAME}"
 check4error "${?}"
-[ -s "${SCRIPTNAME}" ] && bash "${SCRIPTNAME}" "${1}" ;;
+[ -s "${SCRIPTNAME}" ] && bash "${SCRIPTNAME}" "${1}"
 [ -f "${SCRIPTNAME}" ] && rm "${SCRIPTNAME}"
 
 exit 0
