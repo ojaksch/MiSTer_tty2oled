@@ -45,7 +45,9 @@
 #            Example: /usr/bin/tty2oled /dev/ttyUSB1 921600 USB
 # 2021-07-14 Clean up Script
 # 2021-09-09 Moved from /etc/init.d to /media/fat/tty2oled 
+# 2021-09    Grayscale pictures implemented
 # 2021-10-02 Complete rework of senddata
+# 2021-10-05 USE_RANDOM_ALT to choose between _altX pictures
 #
 #
 
@@ -111,21 +113,21 @@ senddata() {
 	[ -e "${picfnam}" ] && break
       done
     fi
-    if [ -e "${picfnam}" ]; then					# Exist?
-
-      if [ "${USE_RANDOM_ALT}" = "yes" ]; then
-	ALTPICNUM=$(find $(dirname "${picfnam}") -name $(basename "${picfnam%.*}")_alt* | wc -l)
-	if [ "${ALTPICNUM}" -gt "0" ]; then
-#	  ALTPICRND=$(( $RANDOM % $((ZAHL+1)) ))
-	  ALTPICRND=$(( ${RANDOM} % $((ALTPICNUM+1)) ))
+    if [ -e "${picfnam}" ]; then						# Exist?
+      if [ "${USE_RANDOM_ALT}" = "yes" ]; then					# Use _altX pictures?
+	SAVEIFS="${IFS}"
+	IFS=$'\n'
+	ALTPICNUM=$(find $(dirname "${picfnam}") -name $(basename "${picfnam%.*}_alt")* | wc -l)
+	IFS="${SAVEIFS}"
+	if [ "${ALTPICNUM}" -gt "0" ]; then					# If more than 0 _altX pictures
+	  ALTPICRND=$(( ${RANDOM} % $((ALTPICNUM+1)) ))				# then dice between 0 and count of found _altX pictures
 	  [ "${ALTPICRND}" -gt 0 ] && picfnam="${picturefolder}/${picfolder^^}/${newcore}_alt"${ALTPICRND}".${picfolder:0:3}"
-	fi
+	fi									# If 0 then original picture, otherwise _altX
       fi
-
       dbug "Sending: CMDCOR,${1}"
       echo "CMDCOR,${1}" > ${TTYDEV}						# Send CORECHANGE" Command and Corename
       sleep ${WAITSECS}								# sleep needed here ?!
-      tail -n +4 "${picfnam}" | xxd -r -p > ${TTYDEV}			# The Magic, send the Picture-Data up from Line 4 and proces
+      tail -n +4 "${picfnam}" | xxd -r -p > ${TTYDEV}				# The Magic, send the Picture-Data up from Line 4 and proces
     else									# No Picture available!
       echo "${1}" > ${TTYDEV}							# Send just the CORENAME
     fi										# End if Picture check
