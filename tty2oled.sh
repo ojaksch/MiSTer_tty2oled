@@ -108,8 +108,8 @@ senddata() {
       [ "${USE_US_PICTURE}" = "no" ] && picfolders="${picfolders//gsc_us xbm_us/}"
       [ "${USE_GSC_PICTURE}" = "no" ] && picfolders="${picfolders//gsc_us/}" && picfolders="${picfolders//gsc/}"
       [ "${USE_TEXT_PICTURE}" = "no" ] && picfolders="${picfolders//xbm_text/}"
-      for (( c="${#newcore}"; c>=1; c-- )); do					# Manipulate string...
-        for picfolder in ${picfolders}; do
+      for picfolder in ${picfolders}; do
+        for (( c="${#newcore}"; c>=1; c-- )); do					# Manipulate string...
 	  picfnam="${picturefolder}/${picfolder^^}/${newcore:0:$c}.${picfolder:0:3}"	# ...until it matches something
 	  [ -e "${picfnam}" ] && break
         done
